@@ -10,7 +10,7 @@ namespace LambdasUnderTheHood {
     {
         int n{ 10 };
 
-        auto lambda{ [n](int a) { return n + a; } };
+        auto lambda = [n](int a) { return n + a; } ;
 
         auto m { lambda(20) };  // m is now 30
 

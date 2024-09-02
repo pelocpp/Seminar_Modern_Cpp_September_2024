@@ -11,9 +11,13 @@ namespace Auto_Examples {
     static void test_01_a() {
 
 
+        // JavaScript / Python
 
+      //  var n;
 
+      //  let o;
 
+        auto z = 123.456;  // Type Deduction // Typableitung
 
         // type deduction / type inference
 
@@ -39,6 +43,15 @@ namespace Auto_Examples {
 
     // ---------------------------------------------------------------------
 
+    // typedef: Ist älter (98%), besser: using
+    using ReturnType = std::map<int, std::string>;
+
+    ReturnType getFunction2() {
+
+        return std::map<int, std::string>{};
+    }
+
+
     std::map<int, std::string> getFunction() {
 
         return std::map<int, std::string>{};
@@ -46,11 +59,11 @@ namespace Auto_Examples {
 
     static void test_01_b() {
 
-        auto n{ 123 };    // n is type of int
+        auto n = 123 ;    // n is type of int
 
-        auto result{ getFunction() };
+        auto result = getFunction();
 
-        std::map<int, std::string> result2{
+        ReturnType result2 {
             getFunction()
         };
     }
@@ -61,6 +74,55 @@ namespace Auto_Examples {
     {
         return f1 + f2;
     }
+
+    static auto tueWas (bool flag, double d, float f) -> double
+    {
+        if (flag) {
+            return d;
+        }
+        else {
+            return f;
+        }
+    }
+
+    // ===> Generische Programmierung
+
+    template <typename T, typename U>
+    
+    static auto tueWas2(bool flag, T d, U f) -> decltype (d + f)
+    {
+        if (flag) {
+            return d;
+        }
+        else {
+            return f;
+        }
+    }
+
+    template <typename T, typename U>
+
+    static decltype ( std::declval<T>() + std::declval<U>() )
+        
+        tueWas3(bool flag, T d, U f)
+    {
+        if (flag) {
+            return d;
+        }
+        else {
+            return f;
+        }
+    }
+
+    void testTueWas()
+    {
+        auto result = tueWas3(false, 123.0f, 123.456);
+    }
+
+
+
+
+
+
 
     static auto foo(bool flag, float f, double d) -> double
     {
@@ -137,8 +199,11 @@ namespace Auto_Examples {
 
     static void test_01_e() {
 
-        auto msg1{ getMessage() };
+        auto msg1 = getMessage() ;
+
         std::println("Message: {}", msg1);
+
+
 
         // but:
         const auto& msg2{ getMessage() };
@@ -234,6 +299,10 @@ namespace Auto_Examples {
 void main_auto()
 {
     using namespace Auto_Examples;
+ 
+
+    testTueWas();
+    
     test_01_a();
     test_01_b();
     test_01_c();

@@ -66,6 +66,8 @@ emplace
 
 noexcept: Wozu
 
+Geschachtelte Struktur: Initialisierung
+
 ===============================================
 
 RValue / LValue ==============> Move - Semantik
@@ -87,5 +89,54 @@ Alternative Technik: Ab C++ 11 : emplace
 
 ===============================================
 
+C++: 
+
+Paradigmen:
+
+== Objekt-Orientierte Sprache     // Bjarne Stroustrup
+== Generische Sprache (Templates) // Alexander Alexandrowitsch Stepanow
+
+Bibliothek: STL  // Standard Template Library
+
+std::vector<int> zahlen;
+
+std::vector<BigData> zahlen;
+
+===============================================
+
+Historie:
+
+Funktionen als Parameter in C++
+
+STL:   std::find_if
+
+a) C-Funktion
+
+b) Aufrufbares Objekt
 
 
+===============================================
+
+Initialisierung:
+
+== Wurde überarbeitet
+
+===============================================
+
+std::initializer_list<T>:  STACK
+std::vector<T>:            HEAP
+
+
+std::initializer_list<int>:
+
+Kein Vollwertiger STL_Container:  Leichtgewichtig // Lightweight
+
+3 Methoden: begin, end, size
+
+======================================
+
+std::vector<int> vec1{ 10 };    // Groesse 1: Erstes Elemente = 10
+
+std::vector<int> vec2( 10 );    // Groesse 10: Alle Elemente = 0
+
+======================================

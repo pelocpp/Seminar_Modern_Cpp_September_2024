@@ -6,9 +6,14 @@ module modern_cpp:lambda;
 
 namespace Lambdas {
 
+    // C Funktion
     static bool compare (int n1, int n2) {
+
+        std::println("vergleiche {} mit {}", n1, n2);
         return n1 < n2;
     }
+
+
 
     class Comparer
     {
@@ -20,9 +25,12 @@ namespace Lambdas {
         Comparer(bool flag) : m_flag{ flag } {}
 
         bool operator() (int n1, int n2) const {
+            std::println("operator(): {} mit {}", n1, n2);
             return (m_flag) ? n1 < n2 : n1 > n2;
         }
     };
+
+
 
     // =====================================================================================
 
@@ -30,7 +38,7 @@ namespace Lambdas {
     {
         Comparer obj{ false };
 
-        bool result = obj(1, 2);
+        bool result = obj (1, 2);   //
 
         std::cout << std::boolalpha << result << std::endl;
     }
@@ -41,6 +49,8 @@ namespace Lambdas {
     {
         std::vector<int> vec{ 5, 6, 4, 1, 3, 2, 7, 8 };
 
+
+        // Range based loop
         for (int n : vec) {
             std::cout << n << ' ';
         }
@@ -68,10 +78,12 @@ namespace Lambdas {
         }
         std::cout << std::endl;
 
+        Comparer comp(true);
+
         std::sort(
             vec.begin(),
             vec.end(),
-            Comparer{}
+            comp
             // Comparer{ false }
         );
 
@@ -84,6 +96,9 @@ namespace Lambdas {
 
     static void test_03()
     {
+        // void test_xx() {}
+
+
         // local class within function possible
         class LocalComparer
         {
@@ -95,6 +110,8 @@ namespace Lambdas {
             LocalComparer(bool flag) : m_flag{ flag } {}
 
             bool operator() (int n1, int n2) const {
+                //m_flag = false;
+                std::println("Local operator: {} mit {}", n1, n2);
                 return (m_flag) ? n1 < n2 : n1 > n2;
             }
         };
@@ -106,12 +123,23 @@ namespace Lambdas {
         }
         std::cout << std::endl;
 
+        bool flag = true;  // aufwärts / abwärts
+
         std::sort(
             vec.begin(),
             vec.end(),
-            LocalComparer{}
-            // LocalComparer{ false }
+
+            // Capture Klausel // Capture Clause // "fangen"
+            [=] (int n1, int n2) {
+                std::println("lambda: {} mit {}", n1, n2);
+                return (flag) ? n1 < n2 : n1 > n2;
+            }
+
+           // LocalComparer()
+            // LocalComparer( false )
         );
+
+        flag = false;
 
         for (int n : vec) {
             std::cout << n << ' ';
@@ -159,16 +187,41 @@ namespace Lambdas {
         std::cout << itsFour() << ", " << itsFive() << std::endl;
     }
 
-    static void test_06() {
+    static int g_startWert = 20;
+
+    static int functionWithThreeParams (int x, int y, int z)
+    {
+        return g_startWert + x + y + z;
+    }
+    
+    static void test_06(int zweiterStartWert) {
+
+        // C
+        int (*fp) (int, int, int) = nullptr;
+
+        int startWert = 20;
+
+        //int functionWithThreeParams(int x, int y, int z)
+        //{
+        //    return startWert + x + y + z;
+        //}
 
         // defining a lambda without 'auto'
-        std::function<int(int, int, int)> lambdaWithThreeParams {
-            [] (int x, int y, int z) {
-                return x + y + z;
+        //std::function < int (int, int, int ) > lambdaWithThreeParams {
+
+        //    [ startWert, zweiterStartWert ] (int x, int y, int z) {
+        //        return zweiterStartWert + startWert + x + y + z;
+        //    }
+        //};
+
+        auto lambdaWithThreeParams {
+
+            [startWert, zweiterStartWert](int x, int y, int z)  -> int {
+                return zweiterStartWert + startWert + x + y + z;
             }
         };
 
-        std::cout << lambdaWithThreeParams(5, 6, 7) << std::endl;
+        std::cout << lambdaWithThreeParams (5, 6, 7) << std::endl;
     }
 
     static void test_07() {
@@ -178,9 +231,28 @@ namespace Lambdas {
         // in the scope of the lambda: We do so by defining a variable
         // in the lambda-capture without specifying its type:
 
+     //   int variable = 11;
+
         // lambda with variable definition
-        auto lambda = [variable = 10] () { return variable; };
+        auto lambda = [variable = 11] () mutable {
+
+            variable++;
+
+            return variable;
+        };
+
         std::cout << lambda() << std::endl;
+        std::cout << lambda() << std::endl;
+        std::cout << lambda() << std::endl;
+
+     //   variable++;
+
+        return;
+
+
+
+
+
 
         // Captures default to 'const value':
         // The mutable keyword removes the 'const' qualification from all captured variables
@@ -200,19 +272,19 @@ namespace Lambdas {
         int n = 1;
         int m = 2;
 
-        auto l1 = [=] {
+        auto l1 = [=] () {
             std::cout << "Copy:      " << n << " " << m << std::endl;
         };
 
-        auto l2 = [&] {
+        auto l2 = [&]() {
             std::cout << "Reference: " << n << " " << m << std::endl;
         };
 
-        auto l3 = [&, m] {
+        auto l3 = [&, m]() {
             std::cout << "Both:      " << n << " " << m << std::endl;
         };
 
-        auto l4 = [=, &m] {
+        auto l4 = [=, &m]() {
             std::cout << "More both: " << n << " " << m << std::endl;
         };
 
@@ -246,15 +318,16 @@ namespace Lambdas {
             std::cout << "Reference: " << n << " " << m << std::endl;
         };
 
-        return lambda;  // I would't do this never ever :-)
+        return lambda;       // I would't do this never ever :-)
     }
 
     static void test_09() {
 
         auto outerLambda1 = test_09_helper_a();
         auto outerLambda2 = test_09_helper_b();
-        outerLambda1();
-        outerLambda2();
+
+        outerLambda1 ();
+        outerLambda2 ();
     }
 
     static void test_10() {
@@ -288,18 +361,18 @@ namespace Lambdas {
 void main_lambdas()
 {
     using namespace Lambdas;
-    test_00();
-    test_01();
-    test_02();
-    test_03();
-    test_04();
-    test_05();
-    test_06();
-    test_07();
-    test_08();
+   //test_00(); 
+   // test_01();
+    //test_02();
+    //test_03();
+    //test_04();
+    //test_05();
+    //test_06();
+    //test_07();
+  // test_08();
     test_09();
-    test_10();
-    test_11();
+    //test_10();
+    //test_11();
 }
 
 // =====================================================================================
