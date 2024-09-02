@@ -13,7 +13,14 @@ namespace Lambdas {
         return n1 < n2;
     }
 
+    void kleineLambdas()
+    {
+        []() {} ();
 
+        // C-Makros
+
+        auto l = [] () {};
+    }
 
     class Comparer
     {
@@ -349,10 +356,10 @@ namespace Lambdas {
         // This kind of expression might be useful when you have
         // a complex initialization of a const  object:
 
-        auto constexpr ConstValue = [] () {
+        auto constexpr ConstValue = [] () -> int {
             /* several lines of code ... - "very complex" computation */
             return 123;
-        }();
+        } ();
 
         std::cout << "Const Value: " << ConstValue << std::endl;
     }

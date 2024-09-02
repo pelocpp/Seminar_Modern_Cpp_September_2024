@@ -26,7 +26,7 @@ namespace ConstExprComplex {
         {
             float real = m_real + other.m_real;
             float imag = m_imag + other.m_imag;
-            return { real, imag };
+            return Complex{ real, imag };
         }
     };
 

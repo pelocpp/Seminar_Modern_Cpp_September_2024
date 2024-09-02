@@ -68,6 +68,8 @@ noexcept: Wozu
 
 Geschachtelte Struktur: Initialisierung
 
+Modul-Technik
+
 ===============================================
 
 RValue / LValue ==============> Move - Semantik
@@ -140,3 +142,116 @@ std::vector<int> vec1{ 10 };    // Groesse 1: Erstes Elemente = 10
 std::vector<int> vec2( 10 );    // Groesse 10: Alle Elemente = 0
 
 ======================================
+
+Was ist das Problem mit 'new' ???
+
+Wo ist das 'delete' ???
+
+a) keines: schlecht
+b) zweimal: Absturz
+
+Smart Pointer:
+
+Worum geht es ??????????????????????
+
+Idee:
+
+a) Es gibt Klassen und Objekte, Konstruktoren und Destruktoren.
+
+b) Konstruktoren und Destruktoren:
+
+   Sie werden 'deterministisch' aufgerufen: 
+
+   Konstruktor: Bei der Objekterzeugung
+   Destruktor:  Wenn das Objekt aus dem Scope fällt.
+
+                Wenn die Methode / Funktion verlassen wird.
+
+c) Idee: Man hat einen Zeiger und platziert diesen
+         in einem Hüllenobjekt // Wrapper
+
+   Konstruktor: Bei der Objekterzeugung  // da könnte man den Zeiger übergeben
+   Destruktor:  Hier könnte man DELETE aufrufen
+
+d) auto_ptr:    Nachteile // deprecated
+
+e) std::unique_ptr
+   std::shared_ptr
+   std::weak_ptr
+
+Unterschiedliche Strategien:
+
+i) std::unique_ptr
+
+   Zu einem Zeitpunkt im Programmablauf kann ein unique_ptr
+   nur EINEN Besitzer haben.
+
+ii) std::shared_ptr
+
+   Zu einem Zeitpunkt im Programmablauf kann ein shared_ptr
+   MEHRERE Besitzer haben.
+
+iii) std::weak_ptr:
+   Unterstützt den std::shared_ptr
+
+====================================================
+
+Klasse Time  // Uhrzeit
+
+void func ()
+{
+    Time now;
+}
+
+A) C# / Java
+
+void func_Java_C# ()
+{
+    Time now;  // das ist KEIN Objekt, nur eine leere Referenz
+
+    Time now = new Time (...);  // das ist ein OBJEKT !!! Am Heap
+
+    // Garbage Collector
+}
+
+B) C++
+
+void func_Cpp ()
+{
+    Time now;   // das ist ein OBJEKT !!! Am Stack
+
+    Time* than = new Time (...);// das ist ein OBJEKT !!! Am Heap
+
+    delete than;
+}
+
+
+C) C++
+
+void func ()
+{
+    Time now;   // Default-Konstruktor
+    // ...
+}   //          // Destruktor an now
+
+
+=================================================
+
+new     // delete
+
+fopen   // fclose
+
+Zweckentfremden
+
+=================================================
+
+Roter Faden =======> 
+
+shared_ptr  // weak_ptr
+
+=================================================
+
+constexpr  const 
+
+
+

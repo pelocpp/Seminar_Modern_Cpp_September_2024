@@ -35,7 +35,7 @@ int main()
         //main_concepts_requires_classes();
         //main_concepts_requires_functions();
         //main_constructor_invocations();
-        //main_constexpr();
+        main_constexpr();
         //main_constexpr_crc();
         //main_const_variants();
         //main_copy_move_elision();
@@ -54,7 +54,7 @@ int main()
         //main_functional_programming_ranges();
         //main_functional_programming();
         //main_functional_programming_alternate();
-        main_initializer_list();
+      //  main_initializer_list();
         //main_input_output_streams();  
         //main_invoke();
        // main_lambdas();
