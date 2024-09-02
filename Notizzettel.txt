@@ -1,0 +1,91 @@
+Modern C++
+
+Peter Loos
+
+Guten Morgen
+
+========================
+
+a) Visual Studio / Eclipse
+
+b) Übungen
+
+c) Github
+
+========================
+
+12.15 bis 12.30
+
+========================
+
+==> Inhalt
+
+a) Agenda
+
+b) Fragerunde:
+
+== Was sind die Erwartungen an dieses Seminar
+== Überblick / Muss ab nächster Woche in Modern C++ programmieren
+   Classic C++  => Modern C++
+== Was MUSS drin sein
+== Multithreading: Yes
+== Welche anderen Sprachen kenne / kann ich ? 
+
+   (  C# (.NET), Java, JavaScript, Python )
+
+Fragen stellen !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+C++ ist eine SEHR UMFANGREICHE Sprache (geworden)
+
+C++ Class ===> C++ 17  (  C++ 20 ... )
+
+Compiler: Gcc auf Linux
+
+Qt als Oberfläche
+
+C#, Java:
+    
+      == Reference based Language (Heap - basiert)
+   
+C++:
+
+      == Stack based Language
+      == Reference based Language (Heap - basiert) // new
+
+Stack based Language: Kopien 
+
+C++ :  Performanz !!!
+
+       Vorsicht: Unnütze Kopien
+
+===============================================
+
+Merkzettel:
+
+emplace
+
+noexcept: Wozu
+
+===============================================
+
+RValue / LValue ==============> Move - Semantik
+
+===============================================
+
+Move-Semantik:
+
+==:  .... E0   // wird freigegegen
+==:  .... B0
+
+
+Zweiter Durchlauf:
+
+==:  .... B0  
+
+
+Alternative Technik: Ab C++ 11 : emplace
+
+===============================================
+
+
+
