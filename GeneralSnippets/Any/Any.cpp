@@ -8,6 +8,8 @@ namespace AnySamples {
 
     static void test_01_any()
     {
+        // auto a;
+
         std::any a{ 1 };
 
         std::cout << a.type().name() << ": " << std::any_cast<int>(a) << std::endl;

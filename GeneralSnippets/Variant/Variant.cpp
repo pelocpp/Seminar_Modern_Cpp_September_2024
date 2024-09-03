@@ -96,13 +96,56 @@ namespace VariantDemo {
 
     // -------------------------------------------------------------------
 
+    // primary template
+    template <class T>
+    struct my_remove_reference 
+    {
+        using type = T;
+    };
+
+    // template specialization
+    template <class T>
+    
+    struct my_remove_reference<T&> 
+    {
+        using type = T;
+    };
+
+
+
     static void test_03() {
 
         std::variant<int, double, std::string> var{ 123 };
 
+        //auto value = 123;
+        //value = "abc";
+
         // using a generic visitor (matching all types in the variant)
-        auto visitor = [](const auto& elem) {
-            std::cout << elem << std::endl;
+        auto visitor = [] (const auto& elem) {
+
+            using ElemType = decltype (elem);
+
+          //  using ElemTypeWithoutRef = std::remove_reference<ElemType>::type;
+            using ElemTypeWithoutRef = my_remove_reference<ElemType>::type;
+            
+            using ElemTypeWithoutRefAndConst = std::remove_const<ElemTypeWithoutRef>::type;
+
+            if constexpr (std::is_same<ElemTypeWithoutRefAndConst, int>::value == true)
+            {
+                std::cout << "int: " << elem << std::endl;
+            }
+            else if constexpr (std::is_same<ElemTypeWithoutRefAndConst, double>::value == true)
+            {
+                std::cout << "double: " << elem << std::endl;
+            }
+            else if constexpr (std::is_same<ElemTypeWithoutRefAndConst, std::string>::value == true)
+            {
+                std::cout << "std::string: " << elem << std::endl;
+                std::cout << "Length of std::string: " << elem.size() << std::endl;
+            }
+            else {
+                std::cout << "Unknown" << std::endl;
+            }
         };
 
         std::visit(visitor, var);
@@ -239,13 +282,13 @@ namespace VariantDemo {
 void main_variant()
 {
     using namespace VariantDemo;
-    test_01();
-    test_02();
+    //test_01();
+    //test_02();
     test_03();
-    test_04();
-    test_05();
-    test_06();
-    test_07();
+    //test_04();
+    //test_05();
+    //test_06();
+    //test_07();
 }
 
 // =====================================================================================

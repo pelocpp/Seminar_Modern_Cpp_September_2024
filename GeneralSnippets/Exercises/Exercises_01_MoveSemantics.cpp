@@ -17,7 +17,23 @@ namespace Exercises_MoveSemantics {
         public:
             Person() {}
             Person(const std::string& name) : m_name{ name } {}
-            ~Person() {}
+
+            // Move-C'tor  // RVAlue-Referenz
+            Person(Person&& person) noexcept
+            {
+                std::cout << "Move-c'tor\n";
+                m_name = std::move(person.m_name);
+                m_values = std::move(person.m_values);
+            }
+
+            Person(const Person& person)
+            {
+                std::cout << "Copy-C'tor\n";
+                m_name = person.m_name;
+                m_values = person.m_values;
+            }
+
+            ~Person() { std::cout << m_name << " released."; }
 
             void addValue(int value) {
                 m_values.push_back(value);
@@ -54,8 +70,10 @@ namespace Exercises_MoveSemantics {
 
             // insert person into a collection
             std::vector<Person> persons;
-            persons.push_back(dagobert);
-            // persons.push_back(std::move(dagobert));
+            persons.push_back(std::move(dagobert));
+
+            persons.push_back( Person { "hans"} );
+            
 
             // print person again
             std::cout << "Person: " << dagobert << std::endl;
@@ -162,7 +180,7 @@ void test_exercises_move_semantics()
 {
     using namespace Exercises_MoveSemantics;
     Exercise_01::testExercise_01();
-    Exercise_02::testExercise_02();
+  //  Exercise_02::testExercise_02();
 }
 
 // =====================================================================================

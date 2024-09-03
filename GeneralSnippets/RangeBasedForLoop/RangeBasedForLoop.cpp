@@ -5,10 +5,58 @@
 module modern_cpp:range_based_for_loop;
 
 /*
- *  12 ways to iterate through a vector 
+ *  12 ways to iterate through a std::vector 
  */
 
 namespace RangeBasedForLoop {
+
+
+    static void test_00()
+    {
+        // STL: Viele Container
+
+        std::vector<int> numbers{ 1, 2, 3, 4, 5 };
+        std::vector<int>::iterator pos;  // iterator Position
+        pos = numbers.begin();
+        pos = numbers.end();
+        pos += 3;
+
+
+        std::map<int, int> myMap;
+        std::map<int, int>::iterator mapPos;
+        mapPos = myMap.begin();
+        mapPos = myMap.end();
+        myMap[1] = 11;
+        myMap[2] = 21;
+        // myMap += 3;
+
+        std::forward_list<int> anotherNumbers{ 11, 12, 13, 14, 15 };
+        std::forward_list<int>::iterator posList;  // iterator Position
+        posList = anotherNumbers.begin();
+        posList = anotherNumbers.end();
+        // posList += 3;
+
+        // Geht nur bei RANDOM ACCESS Operatoren
+        for (int i = 0; i < numbers.size(); ++i) {
+            std::cout << numbers[i] << '\n';
+        }
+
+        // STL-Container <==> STL-Iteratoren <==> STL-Algorithmus (std::for_each)
+
+        std::for_each(
+            myMap.begin(),
+            myMap.end(),
+            [](const auto& elem) {
+                auto [key, value] = elem;
+                std::cout << key << " - " << value << "\n";
+            }
+            //[]( auto& [key, value] ) {
+            //    auto [key, value] = elem;
+            //    std::cout << key << " - " << value << "\n";
+            //}
+        );
+
+    }
 
     // global function
     static void processElement(int n)
@@ -55,7 +103,7 @@ namespace RangeBasedForLoop {
         );
         std::cout << std::endl;
 
-        // d) Looks like C++, classic style, 'Functor'-stylistic
+        // d) Looks like C++, classic style, 'Callable-Object'-stylistic
         std::for_each(
             vec.begin(),                   // Iterator-object for begin of range
             vec.end(),                     // Iterator-object for end of range
@@ -74,7 +122,7 @@ namespace RangeBasedForLoop {
         std::cout << std::endl;
 
         // =========================================================================
-        // Range-based 'for' Loop examples
+        // Range-based 'for' Loop examples  // for_each
 
         // f) Using Range-based 'for' Loop: Very modern style
         for (int n : vec) {
@@ -128,17 +176,20 @@ namespace RangeBasedForLoop {
 
         // l) Range-based 'for' loop with initializer,
         // we can now use the index variable inside the for statement
-        for (int index{}; int n : vec) {
+        for (int index{} ; int n : vec) {
             std::cout << index << ": " << n << " " << std::endl;
             ++index;
         }
+
+        // index = 0;
     }
 }
 
 void main_range_based_for_loop()
 {
     using namespace RangeBasedForLoop;
-    test_01(); 
+    test_00();
+   // test_01(); 
 }
 
 // =====================================================================================

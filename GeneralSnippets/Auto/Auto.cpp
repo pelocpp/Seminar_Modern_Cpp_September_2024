@@ -17,6 +17,8 @@ namespace Auto_Examples {
 
       //  let o;
 
+        auto xyz = 'A';
+
         auto z = 123.456;  // Type Deduction // Typableitung
 
         // type deduction / type inference

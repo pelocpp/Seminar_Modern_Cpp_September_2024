@@ -67,7 +67,9 @@ namespace GenericFunctions {
     // -------------------------------------------------------------------
 
     // define a generic function (top-level (!))
-    static auto isGreaterThanFifty(const auto& n) { return n > 50; };
+    static auto isGreaterThanFifty(const auto& n) {
+        return n > 50; 
+    };
 
     static void test_04()
     {
@@ -161,7 +163,9 @@ namespace GenericLambdas {
     static void test_04()
     {
         // define a generic lambda
-        auto isGreaterThanFifty = [](const auto& n) { return n > 50; };
+        auto isGreaterThanFifty = [] (const auto& n) { 
+            return n > 50;
+        };
 
         std::vector<int> intValues{ 44, 65, 22, 77, 2 };
 
@@ -169,7 +173,7 @@ namespace GenericLambdas {
         auto it1 = std::find_if(
             intValues.begin(),
             intValues.end(),
-            isGreaterThanFifty
+            isGreaterThanFifty   // CTAD
         );
         if (it1 != intValues.end()) {
             std::cout << "Found a value: " << *it1 << std::endl;

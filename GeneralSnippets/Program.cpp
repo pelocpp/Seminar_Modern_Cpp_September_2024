@@ -23,7 +23,7 @@ int main()
         //main_any();
         //main_apply();  
         //main_argument_dependent_name_lookup();
-        //main_array();
+      //  main_array();
         //main_array_decay();
         //main_attributes();
        // main_auto();
@@ -35,7 +35,7 @@ int main()
         //main_concepts_requires_classes();
         //main_concepts_requires_functions();
         //main_constructor_invocations();
-        main_constexpr();
+      //  main_constexpr();
         //main_constexpr_crc();
         //main_const_variants();
         //main_copy_move_elision();
@@ -47,7 +47,7 @@ int main()
         //main_exercises();
         //main_expression_templates();
         //main_generate();
-        //main_generic_functions();
+      // main_generic_functions();
         //main_exception_safety();
         //main_explicit_keyword();
         //main_folding();
@@ -67,14 +67,14 @@ int main()
         //main_modularized_standard_library(); 
         //main_modules();
       //  main_move_semantics();
-        //main_optional();
+       // main_optional();
         //main_perfect_forwarding();
         //main_placement_new();
         //main_println();
         //main_raii();
         //main_raii_02();
         //main_random();
-        //main_range_based_for_loop();
+        main_range_based_for_loop();
         //main_reference_wrapper();
         //main_regular_expressions();
        // main_rvalue_lvalue();
@@ -84,7 +84,7 @@ int main()
         //main_sso();
         //main_static_assert();
         //main_string_view();
-        //main_structured_binding();
+       // main_structured_binding();
         //main_class_templates_basics_01();
         //main_class_templates_basics_02();
         //main_function_templates_basics();
@@ -106,7 +106,7 @@ int main()
         //main_variant();
         //main_virtual_base_class_destructor();
         //main_virtual_override_final();
-        //main_weak_pointer();
+       // main_weak_pointer();
     }
     catch (const std::exception& ex) {
         std::cout << "Exception: " << ex.what() << std::endl;

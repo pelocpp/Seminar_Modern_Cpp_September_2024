@@ -16,9 +16,9 @@ namespace Literals_With_Separators {
         // (including single quotation mark as separator)
 
         long decval { 1'048'576 };
-        long hexval { 0x10'0000 };
+        long hexval { 0x10'0F00 };
         long octval { 00'04'00'00'00 };
-        long binval { 0b1'00000000'00000000'00000000 };
+        long binval { 0b1'00010000'00000000'00000000 };
 
         std::cout << decval << std::endl;
         std::cout << hexval << std::endl;
@@ -33,7 +33,8 @@ namespace Literals_With_Separators {
 
 namespace Literals_Color_Runtime {
 
-    class Color {
+    class Color 
+    {
         friend std::ostream& operator<< (std::ostream&, const Color&);
 
     private:
@@ -59,7 +60,7 @@ namespace Literals_Color_Runtime {
     }
 
     // literal operator ("cooked" version)
-    static Color operator"" _rgb(unsigned long long int value) {
+    static Color operator"" _rgb (unsigned long long value) {
 
         if (value > 0xFFFFFF) {
             throw std::runtime_error("literal too large");
@@ -95,6 +96,8 @@ namespace Literals_Color_Runtime {
     }
 
     static void test_02() {
+
+     //   int n = 11111111111111111111111111111111111111111111111;
 
         Color red{ 0xFF0000_rgb };
         std::cout << red << std::endl;
@@ -156,7 +159,7 @@ namespace Literals_Color_CompileTime {
     }
 
     // literal operator ("cooked" version)
-    static constexpr Color operator"" _rgb(unsigned long long int value) {
+    static constexpr Color operator"" _rgb (unsigned long long int value) {
 
         if (value > 0xFFFFFF) {
             throw std::logic_error("literal too large");
@@ -259,10 +262,10 @@ namespace Literals_Color_CompileTime {
     static void test_03_with_errors() {
 
         // value outside rgb range
-        // constexpr Color col1{ 0x1FFFFFF_rgb };
+        constexpr Color col1{ 0xFFFFFF_rgb };
 
         // illegal hexadecimal digit
-        // constexpr Color col2{ "0x00GG00"_rgb };
+        Color col2{ "0x005500"_rgb };
     }
 }
 
@@ -273,7 +276,7 @@ void main_literals()
 
     using namespace Literals_Color_Runtime;
     test_02();
-    // test_02_with_errors();   // throws exceptions at runtime
+   // test_02_with_errors();   // throws exceptions at runtime
 
     using namespace Literals_Color_CompileTime;
     test_03();

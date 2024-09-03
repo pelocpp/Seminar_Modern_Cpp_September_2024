@@ -253,5 +253,253 @@ shared_ptr  // weak_ptr
 
 constexpr  const 
 
+C++  ===> Übersetzer abhandelt: 
+
+     = Metaprogramming (Templates)
+     = constexpr: feature ==> große Funktionalität ( Mini-Sprache a la C )
+                              zur Übersetzungszeit behandelt.
+
+                              ABER: Frage: Übersetzungszeit abhandeln.
+
+                              Tabellen / Matrizen / Werte: Vorab bekannt sind.
+
+=================================================
+
+std::unique_ptr
+std::shared_ptr
+
+Neue Entwicklung:
+
+Was wäre in einem ersten Ansatz die Vorzugslage für einen Smart-Pointer:
+unique oder shared ?
+
+Go for std::unique_ptr :  Frage: Wer ist der Besitzer / Owner !!!
+
+Größere Programme: Kann komplex werden mit einem std::unique_ptr
+
+Go for std::shared_ptr: Erst mal richtig.
+
+Aber: Er funktioniert nicht immer :(  ???????????????????????????  Owner !!!
+
+"Go for Smart Pointer"
+
+std::weak_ptr: Why ????????????????????????????????????
+
+Moral:
+
+Wie setzen wir shared_ptr ein ?????
+
+a) Ich verwenden einen shared_ptr, wenn ich das Objekt BESITZEN möchte.
+
+   Ergänzung: shared_ptr wird in einem Container zusätzlich abgelegt.
+
+b) Überlegung: Kann man von "alt nach neu" einfach ALLE klassischen Zeiger
+   durch std::shared_ptr umsetzen ???? FALSCH !!!
+
+c) Ich möchte ein Objekt verwenden
+   (Graphisch visualisieren möchte, weil ich Daten benötige (Aktienkurs)),
+   aber NICHT ein Besitzer sein / werden: std::weak_ptr:
+
+   Was ist, wenn via lock ein nullptr zurück kommt:
+
+   Diese Situtation muss handelbar sein :)
+
+d) Je mehr weak_ptr, desto besser :)
+
+
+
+Beispiel:
+
+Observer-Pattern:
+
+a) Event-Quelle: Source // Informationen
+
+b) Event-Client: Interessenten für Änderungen an der Event-Quelle
+
+i) Alles diese Objekte werden via std::shared_ptr angelegt.
+
+ii) Die Ownership ist / wird geregelt.
+
+iii) Ein Event-Client meldet sich an der Event-Quelle an:
+
+    source.register (client);
+
+    WIE SPEICHERT die SOURCE den Client ab ???
+
+    shared- oder weak-ptr aufheben ????????????? WEAK-PTR
+
+    Hmm, wenn Zugang zum Weakptr ==> nullptr ergibt: Source ignoriert diesen Client.
+
+
+Smart Pointer: Sind nicht gaaaaaaaaaaaaaaaaaanz trivial : Doch, nach 1-2 Wochen sind sie es :)
+
+'delete' // ===> Wer ist der Owner des Shared-Ptr's
+
+"STL und Smart Pointer kennen sich"
+
+Garbagge Collector Feeling
+
+=======================================================================
+
+Alt-Code: ==> Never change a running System.
+
+Zeiger:  Verwaltung der Daten: Größerer Eingriff.
+
+int* ip;    ==> std::shared_ptr<int>: NEIN  // Ownership
+
+=======================================================================
+
+Übung: Move-Semantik
+
+
+=======================================================================
+
+C++   Lexikon:
+
+123
+
+123.5f
+
+123l
+
+123ll
+
+123_km
+
+123_kilogramm   ==> int
+
+123_kg
+
+123_pound
+
+0x00FF00_farbe  ==>  class Color
+ 
+0x00FF00_rgb    ==>  class Color
+
+int weight = 5_kg + 300_gramm;
+
+
+class Weight
+{
+   Weight (int weight) : m_weigt(weight) {}
+
+   int m_weigt;
+}
+
+
+Weight w(3_kg);
+
+
+
+100_euro
+
+"11:47:30"_uhrzeit
+
+=> Inhalt der Zeichenkette parsen und in ein Objekt / Variable umwandeln
+
+Operator ""   Literal Operator
+
+              UDL  : user defined literal
+
+Syntax von C++:   ....  operator"" _suffix ( params )    // suffix = kg, pound, ...
+
+// ====================================================================
+
+Klassiker:
+
+int n;
+
+......
+
+
+// hat n einen gültigen Wert ??????????
+
+if (n == 0) ...
+
+if (n == -1) ...
+
+if (n == -MaxInt) ...
+
+
+int  n;
+bool isValid;
+
+C#:
+
+int  n;
+int? n;   // eine bool-Variable
+
+C++:
+
+std::optional<int>
+
+========================================================
+
+Arrays:
+
+int zahlen[10];
+
+versus
+
+std::array<int, 10> zahlen;
+
+Funktionaler Unterschied: Keiner.
+
+Fixed Size Arrays.
+
+Why ????????????????????????????????????
+
+Unterschiede im Details.
+
+a) Robustheit:
+
+Falscher Index: C-Array:  Kann abstürzen, muss aber nicht // UB
+
+                Undefined behaviour
+
+Falscher Index: std::array:  
+
+i)  Operator []:            Performanz - kein Check -  Kann abstürzen ....
+ii) Methode at(int index):  Hier wird eine Exception geworfen.
+
+
+UB: ===> Schwäche von C++ auf Grund der Komplexität von C++
+
+b) Mehr OO: front, back
+
+===================================================================
+
+std::variant
+
+Helfer-Klasse:
+
+Ein std::variant-Objekt kann Werte unterschiedlichen Datentyps aufnehmen,
+zu einem Zeitpunkt aber nur einen Datentyp.
+
+==> union: Nein
+
+Why ?????????????????????????????
+
+Beispiel 1:
+
+Excel-Sheet:   Zelle / Cell ==> Zahl, Zeichenkette, Datum, Currency, Gleitpunkt
+
+
+Beispiel 2:
+
+GameBoard:   Brett : Figuren:   board[2][2] = figur1, figur2, ....
+
+
+==========================================================
+
+std::tuple <char, int, double> moreValues{ 'Z', 987, 987.654 };
+
+Womit hat ein Tuple Ähnlichkeit?
+
+Mit einem struct !!!
+
+Ein Tuple ist ein struct für Schreibfaule :)
+
+
 
 

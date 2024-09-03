@@ -12,9 +12,9 @@ namespace StdArray {
     static void test_01() {
 
         // initialization variants
-        std::array<int, 5> array1{};
-        std::array<int, 5> array2{ 1, 2, 3, 4, 5 };     // brace initialization
-        std::array<int, 5> array3 = { 1, 2, 3, 4, 5 };  // initializer list
+        std::array<int, 5> array1 {};
+        std::array<int, 5> array2 { 1, 2, 3, 4, 5 };     // brace initialization
+        std::array<int, 5> array3 = { 1, 2, 3, 4, 5 };   // initializer list
     }
 
     static void test_02() {
@@ -23,6 +23,7 @@ namespace StdArray {
         */
 
         // type is deduced to std::array<double, 2>
+        // CTAD: Class Template Argument Deduction
         std::array array1{ 123.456, 654.321 };
 
         // type is deduced to std::array<int, 5>
@@ -270,8 +271,8 @@ namespace StdArray {
 
     // returning a C-style
 
-#pragma warning(push)
-#pragma warning(disable : 4172)
+//#pragma warning(push)
+//#pragma warning(disable : 4172)
 
     // returning address of local variable or temporary C style array:
     // compiles, but is false
@@ -290,7 +291,7 @@ namespace StdArray {
         return result;
     }
 
-#pragma warning(pop)
+// #pragma warning(pop)
 
     // returning an std::array
     static std::array<int, 3>
@@ -375,23 +376,29 @@ namespace StdArray {
 
     static void test_31() {
 
-        int carr[]{ 1, 2, 3, 4, 5 };
-        printSpan(carr);
+        //int carr[]{ 1, 2, 3, 4, 5 };
+        //printSpan(carr);
 
-        std::array arr{ 6, 7, 8, 9, 10 };
-        printSpan(arr);
+        //std::array arr{ 6, 7, 8, 9, 10 };
+        //printSpan(arr);
 
-        std::vector<int> vec{ 1, 3, 5, 7, 9 };
-        printSpan(vec);
+        //std::vector<int> vec{ 1, 3, 5, 7, 9 };
+        //printSpan(vec);
+
 
         //int carr[]{ 1, 2, 3, 4, 5 };
         //printSpan(std::span{ carr });
 
         //std::array arr{ 6, 7, 8, 9, 10 };
-        //printSpan(std::span{ arr });
+        //printSpan(std::span{ arr});
 
-        //std::vector vec{ 1, 3, 5, 7, 9 };
-        //printSpan(std::span{ vec });
+        std::vector vec{ 1, 2 };
+
+        std::span sp{ vec };
+
+        vec.push_back(3);
+
+        printSpan(vec);
     }
 
     // --------------------------------------------------------------------
@@ -425,21 +432,21 @@ void main_array()
 {
     using namespace StdArray;
 
-    test_01();
-    test_02();
-    test_03();
-    test_04();
-    test_05();
-    test_06();
-    test_07();
-    test_08();
-    test_09();
-    test_10();
-    test_11();
-    test_20();
-    test_30();
+    //test_01();
+    //test_02();
+    //test_03();
+    //test_04();
+    //test_05();
+    //test_06();
+    //test_07();
+    //test_08();
+    //test_09();
+    //test_10();
+    //test_11();
+    //test_20();
+    //test_30();
     test_31();
-    test_32();
+    //test_32();
 }
 
 // =====================================================================================

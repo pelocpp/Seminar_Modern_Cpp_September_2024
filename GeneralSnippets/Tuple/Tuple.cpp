@@ -21,10 +21,13 @@ namespace TupleSamples {
         std::tuple <char, int, double> moreValues{ 'Z', 987, 987.654 };
 
         // accessing tuple values using std::get 
+
+        constexpr int n = 1;
+
         std::cout << "The values of tuple are : ";
         std::cout 
             << std::get<0>(values) << " - " 
-            << std::get<1>(values) << " - " 
+            << std::get<n>(values) << " - " 
             << std::get<2>(values)
             << std::endl;
 
@@ -65,6 +68,7 @@ namespace TupleSamples {
         Row row3 = std::make_tuple(12, 'C', 3.33, "Hans");
 
         std::vector<Row> mySheet;
+        std::vector<std::tuple<int, char, double, std::string>> mySheet2;
 
         mySheet.push_back(row1);
         mySheet.push_back(row2);
@@ -99,6 +103,9 @@ namespace TupleSamples {
             << "Value: " << val << std::endl
             << "Name:  " << name << std::endl;
 
+
+        // Range-Based Loop:  for_each:  for // structured binding
+
         for (const auto& [id, abbr, val, name] : mySheet) {
 
             std::cout 
@@ -131,7 +138,7 @@ namespace TupleSamples {
 
         // or (note: std::ignore)
         // 
-        // std::tie(id, std::ignore, val, name) = mySheet[0];
+        std::tie(id, std::ignore, val, name) = mySheet[0];
 
         std::cout
             << "Id:    " << id << std::endl
