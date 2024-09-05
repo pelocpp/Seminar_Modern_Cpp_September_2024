@@ -734,3 +734,151 @@ Multi-Threading:
 ----------------
 
 
+std::thread   ============>  CreateThread
+
+===================================================
+
+Resource:
+
+
+std::mutex:   Auf ein lock MUSS ein unlock folgen !!!!!!!!!!!!!!!!!
+
+
+RAII : Resource Acquisition is Initialization
+
+Ähnlich zu der Idee von Smart Pointern:    ==> Hüllen Klasse
+
+
+===================================================
+
+
+Threads als Objekt:
+
+CreateThread:    Teure Funktion ===> Speicher (Belegt Ressources im Kernel) + Performanz
+
+              WebServer:   Incoming Requests ===> CreateThread
+
+              SocketServer:     Incoming Requests ===> CreateThread
+
+
+Thread-Pool:  UNTERSCHIED:
+
+         Ein Thread aus einem Pool kann MEHERE MALE verwendet werden.
+
+         Die Funktion kann eine andere sein.
+
+
+C++ + Thread-Pool ????
+
+===================================================
+
+
+Konkurrenz:     Konkurrierende Zugriff // Gegenseitig Ausschließen // Mutual Exclusion  // MutEx
+
+
+Kooperation:   
+
+== Ein Thread berechnet // produziert
+
+== Ein Thread wartet auf Ergebnisse // konsumiert
+
+
+
+C++:  Hilfsmittel 
+
+Ab dem ersten Tag :  std::condition_variable
+
+C++ 20:  std::semaphore
+
+====================================================
+
+std::jthread     joinable-State   ==> terminate
+
+JThread: Joinable Thread
+
+Wer hat ide Klasse geschrieben:  Nicolai Josuttis
+
+
+====================================================
+
+int n = 0;
+
+
+a) Ich zähle n 1000 mal um 1 hoch
+
+b) Ich zähle n 1000 mal um 1 runter
+
+
+Wir machen das Hoch- und Runterzählen in VERSCHIEDENEN Threads. :)
+
+Frage: Welchen Wert hat n ??
+
+
+
+                ++m_counter;
+
+00007FF6148F09F3  mov         rax,qword ptr [this]  
+00007FF6148F09FA  mov         eax,dword ptr [rax]  
+00007FF6148F09FC  inc         eax                                 plus 1 // EAX  // Akkumulator
+
+// <=============================   Unterbrechung
+
+
+================================ Es werden ALLE Register zwischengespeichert, auch EAX
+
+Weiter geht: EAX wird restauriert ....................... mit einem veralteten Wert.
+
+00007FF6148F09FE  mov         rcx,qword ptr [this]  
+00007FF6148F0A05  mov         dword ptr [rcx],eax  
+
+Problem: Lesen und Schreiben einer Speicherzelle sind NICHT Atomar // ein Befehl
+
+
+==================================================
+
+long counter;
+
+bool ist ein int .... das Lesen und Schreiben kann bei 0 und 1 nicht kaputt gehen.
+
+==================================================
+
+Semaphore
+
+==================================================
+
+Nachrichtenwarteschlange: "All in"
+
+Übung
+
+== Nicht nur Daten abgelegt
+== Funktionen abgelegt - sequentiell abgearbeitet werden
+
+Beispiel:
+
+Außen Ereignisse:
+
+Alarme: Nicht verloren gehen // einzeln quttiert werden // Logging eingetragen werden.
+
+Alarmschwall:  Ein Alarm // Kaskade 
+
+C++ 11   // Zufall 
+
+Zusammenspiel // Praxistouch
+
+==================================================
+
+
+std::mutex:
+
+lock()
+....   // function 
+unlock()
+
+
+Zwangsserialisierung   // Bremsen:  Performanz
+
+Der geschütze Bereich könnte in einer Warteschlange zwischengespeichert werden.
+
+====================================================
+End-Of-File
+====================================================
