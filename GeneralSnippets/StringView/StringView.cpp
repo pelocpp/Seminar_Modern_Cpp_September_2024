@@ -8,11 +8,15 @@ module;
 
 module modern_cpp:string_view;
 
+constexpr const char* wp = "Another Window";
+
 namespace StringViewDemonstration {
 
     static void test_01()
     {
-        std::string_view sv{ "The quick brown fox jumps over the lazy dog" };  // Konstante Zeichenkette
+        constexpr const char* wp = "Another Window";
+
+        std::string_view sv{ "The quick brown fox jumps over the lazy dog" };  // Konstante Zeichenkette // NICHT AM HEAP
 
         std::string s{ "The quick brown fox jumps over the lazy dog" };        //  Heap
 
@@ -23,6 +27,9 @@ namespace StringViewDemonstration {
     static void test_02()
     {
         std::string s{ "How vexingly quick daft zebras jump!" };
+
+        // foo (std::string& s)  // foo (std::string_view s)
+        // foo();
 
         std::string_view sv{ s };
 
@@ -81,10 +88,10 @@ namespace StringViewDemonstration {
 void main_string_view()
 {
     using namespace StringViewDemonstration;
-    test_01();
+    //test_01();
     test_02();
-    test_03();
-    test_04();
+    //test_03();
+    //test_04();
 }
 
 // =====================================================================================

@@ -15,7 +15,7 @@ concept NumericalEx = std::is_integral<T>::value || std::is_floating_point<T>::v
 namespace Requires_Clause {
 
     template <typename T>
-        requires Numerical<T>
+      //  requires Numerical<T>
     auto add(T a, T b)
     {
         return a + b;
@@ -36,6 +36,8 @@ namespace Requires_Clause {
 
         auto sum2{ add(123.456, 654.321) };
         std::cout << sum2 << std::endl;
+
+       // auto sum3{ add("123.456", "654.321") };
 
         // 'add': no matching overloaded function found		
         // template parameter 'T' is ambiguous
@@ -197,6 +199,14 @@ namespace UserDefined_Concept {
     template<typename T>
     constexpr bool isGreaterThanWord{ sizeof(T) > 2 };
 
+    void tueWas()
+    {
+        if  (isGreaterThanWord<char>)
+        {
+            std::cout << "bin hier";
+        }
+    }
+
     // using <type_traits>
     template <typename T>
     concept GreatIntegral = std::is_integral<T>::value && isGreaterThanWord<T>;
@@ -216,9 +226,9 @@ namespace UserDefined_Concept {
 
         n = incrementByOne(n);
 
-        // short s{ 1 };
+       // short s{ 1 };
         // the associated constraints are not satisfied:
-        // s = incrementByOne(s);
+       // s = incrementByOne(s);
 
         n = incrementByTwo(n);
 

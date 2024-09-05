@@ -4,6 +4,219 @@
 
 module modern_cpp:variadic_templates;
 
+namespace VariadicTemplatesSeminar {
+
+    // ========================================================================
+// Test-Klasse Unknown
+// Nur die Konstruktoren sind interessant
+// ========================================================================
+
+    class Unknown {
+    private:
+        int m_var1;
+        int m_var2;
+        int m_var3;
+
+    public:
+        Unknown(const Unknown& other)
+            : m_var1{ other.m_var1 }, m_var2{ other.m_var2}, m_var3{ other.m_var3 } {
+            std::cout << "copy c'tor()" << std::endl;
+        }
+
+        Unknown(Unknown&& other) noexcept
+            : m_var1{ other.m_var1 }, m_var2{ other.m_var2 }, m_var3{ other.m_var3 } {
+            
+            other.m_var1 = 0;
+            other.m_var2 = 0;
+            other.m_var3 = 0;
+
+            std::cout << "move c'tor()" << std::endl;
+        }
+
+        Unknown() : m_var1{ -1 }, m_var2{ -1 }, m_var3{ -1 } {
+            std::cout << "c'tor()" << std::endl;
+        }
+
+        Unknown(int n) : m_var1{ n }, m_var2{ -1 }, m_var3{ -1 } {
+            std::cout << "c'tor(int)" << std::endl;
+        }
+
+        Unknown(double d1, double d2, long l) {
+            std::cout << "c'tor(double, double, long)" << std::endl;
+        }
+
+        Unknown(int n, int m) : m_var1{ n }, m_var2{ m }, m_var3{ -1 } {
+            std::cout << "c'tor(int, int)" << std::endl;
+        }
+
+        Unknown(int n, int m, int k) : m_var1{ n }, m_var2{ m }, m_var3{ k } {
+            std::cout << "c'tor(int, int, int)" << std::endl;
+        }
+
+        friend std::ostream& operator<< (std::ostream&, const Unknown&);
+    };
+
+    std::ostream& operator<< (std::ostream& os, const Unknown& obj) {
+        os
+            << "var1: " << obj.m_var1
+            << ", var2: " << obj.m_var2
+            << ", var3: " << obj.m_var3 << std::endl;
+
+        return os;
+    }
+    
+    // C++ 11: zwei Funktionen
+    // C++ 17: einer Funktion
+    // Sammelname: Parameter Pack
+    // C++20: Generische Funktionen
+    // Pack: for - each
+
+    // C++ 11
+    //template <typename T>
+    //void printer(T n) {
+    //    std::cout << n << std::endl;
+    //}
+
+    //template <typename T, typename ... TRest>    // einpacken
+    //void printer(T n, TRest ... args) {          // einpacken
+    //    std::cout << n << std::endl;
+    //    printer(args ...);
+    //}
+
+    //void printer(auto n) {
+    //    std::cout << n << std::endl;
+    //}
+
+    //void printer(auto n, auto ... args) {
+    //    std::cout << n << std::endl;
+    //    printer(args ...);
+    //}
+
+    // C++ 17
+    //template <typename T, typename ... TRest> 
+    //void printer(T n, TRest ... args) { 
+
+    //    std::cout << n << std::endl;
+
+    //    if constexpr (sizeof... (args) > 0)
+    //    {
+    //        printer(args ...);
+    //    }
+    //}
+
+    // C++ 20
+    void printer(auto n, auto ... args) { 
+
+        std::cout << n << std::endl;
+
+        if constexpr (sizeof... (args) > 0)
+        {
+            printer(args ...);
+        }
+    }
+
+    void testSeminar_intro() {
+
+        printer(1, 2, 3, 4, 5);
+    }
+
+    // ===================================================
+
+    // 1. Motivation // Why
+
+    // a) Geht, aber KOPIEN
+    template <typename T, typename ... TArgs>
+    auto my_make_unique_01 (TArgs ... args) {
+
+        std::unique_ptr<T> up{ new T { args ... } };
+        return up;
+    }
+
+    // b) Geht, und es werden Adressen / Referenzen übergeben
+    template <typename T, typename ... TArgs>
+    auto my_make_unique(TArgs&& ... args) {
+
+        std::unique_ptr<T> up{ new T { std::forward<TArgs>(args) ...  }};
+        return up;
+    }
+
+    void testSeminar() {
+
+        int x = 123;
+
+        std::unique_ptr<Unknown> up {
+            my_make_unique<Unknown>(1, 2, x)
+        };
+    }
+
+    // ===================================================
+
+    // 2. Motivation // Why // emplace
+
+    void testSeminar_emplace() {
+
+        std::vector<Unknown> vec;
+
+        vec.push_back(Unknown{ 4, 5, 6 });   // a) user-defined c'tor // b) move-c'tor
+
+        vec.emplace_back(1, 2, 3);
+    }
+
+    // ===================================================
+
+    // 3. Frage // for_each
+
+    // C++ 11:  Parameter Pack:  ... args // args ...
+
+
+    // C++ 20
+    void my_for_each(auto ... args)
+    {
+        auto list = { args ... };
+
+        //for (auto n : list) {
+        //    std::cout << n << '\n';
+        //}
+
+        for (auto n : { args ...  }) {
+            std::cout << n << '\n';
+        }
+    }
+
+
+    // C++ 11
+    template <typename TFirst, typename ... TArgs>
+    void my_for_each_11(TFirst first, TArgs ... args)
+    {
+        // auto list = { args ... };
+
+        std::initializer_list<TFirst> list = { first, args ... };
+
+        for (auto n : list) {
+            std::cout << n << '\n';
+        }
+    }
+
+    void testSeminar_forEach() {
+
+        my_for_each(1, 2, 3, 4, 5, 6);
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 namespace VariadicTemplatesIntro_01 {
 
     // ====================================================================
@@ -273,8 +486,13 @@ namespace VariadicTemplatesIntro_05 {
     }
 }
 
+
 void main_variadic_templates_introduction()
 {
+    using namespace VariadicTemplatesSeminar;
+    testSeminar();
+    return;
+
     using namespace VariadicTemplatesIntro_01;
     test_printer_01();
 

@@ -111,6 +111,12 @@ namespace VariantDemo {
         using type = T;
     };
 
+    template <>
+    struct my_remove_reference<int>
+    {
+        using type = int;
+    };
+
 
 
     static void test_03() {
@@ -195,14 +201,29 @@ namespace VariantDemo {
     static void test_05() {
 
         std::vector<std::variant<int, long, long long, float, double>>
+
             vec = { 100, 200l, 300ll, 400.5f, 500.5 };
+
 
         // display each value
         std::cout << "Values:      ";
+
         for (const auto& var : vec) {
-            std::visit([](const auto& n) { std::cout << n << " "; }, var);
+
+            size_t index = var.index();              // switch( index)
+
+            std::visit(
+                [](const auto& n) {
+                    std::cout << n << " "; 
+                },
+                var
+            );
         }
         std::cout << std::endl;
+
+
+
+
 
         // display each type
         std::cout << "Types:       ";
@@ -284,9 +305,9 @@ void main_variant()
     using namespace VariantDemo;
     //test_01();
     //test_02();
-    test_03();
+   // test_03();
     //test_04();
-    //test_05();
+    test_05();
     //test_06();
     //test_07();
 }

@@ -323,6 +323,61 @@ namespace BraceInitialization {
         MyYetAnotherClass obj{};
         obj();
     }
+
+    class Point {
+    public:
+        // c'tors
+        Point() : Point{ 0.0, 0.0 } {}
+
+        Point(double x, double y) : m_x{ x }, m_y{ y } {}
+
+        // getter
+        double X() const { return m_x; }
+        double Y() const { return m_y; }
+
+    private:
+        double m_x;
+        double m_y;
+    };
+
+    class Rectangle
+    {
+    private:
+        Point m_upperLeft;
+        Point m_upperRight;
+        Point m_lowerLeft;
+        Point m_lowerRight;
+
+    public:
+        // c'tors
+        Rectangle() : m_upperLeft{}, m_upperRight{}, m_lowerLeft{}, m_lowerRight{} {}
+
+        Rectangle(Point upperLeft, Point upperRight, 
+            Point lowerLeft, Point lowerRight) :
+            m_upperLeft{ upperLeft }, m_upperRight{ upperRight },
+            m_lowerLeft{ lowerLeft }, m_lowerRight{ lowerRight } 
+        {}
+
+        //Rectangle(std::initializer_list<int> list)
+        //{
+        //}
+    };
+
+    static void test_12()
+    {
+        Rectangle rect1
+        { 
+            { 1, 1 },
+            { 5, 1 }, 
+            { 1, 10 }, 
+            { 5, 10 } 
+        };
+
+        //Rectangle rect2
+        //{
+        //     1, 1 , 5, 1 , 1, 10 , 5, 10 
+        //};
+    }
 }
 
 void main_brace_initialization()
@@ -343,6 +398,8 @@ void main_brace_initialization()
     test_09_01();
     test_10();
     test_11();
+
+    test_12();
 }
 
 // =====================================================================================

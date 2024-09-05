@@ -22,17 +22,19 @@ namespace StdInvoke {
         Incrementer(int x) : m_x{ x } {}
 
         void incrementBy(int n) { m_x += n; }
-        void operator()() { std::cout << "m_x: " << m_x << std::endl; }
+
+        void operator() () { std::cout << "m_x: " << m_x << std::endl; }
     };
 
     class TimesThree
     {
     public:
-        int operator()(int n) { return 3 * n; }
+        int operator() (int n) { return 3 * n; }
     };
 
     // testing scenarios for std::invoke
-    static void test_01() {
+    static void test_01()
+    {
         int result;
 
         // free function:
@@ -52,7 +54,9 @@ namespace StdInvoke {
 
         // member function through pointer to member function:
         Incrementer inc;
+
         std::invoke(&Incrementer::incrementBy, &inc, 5);
+
         inc();  // output
         // => 5
 
@@ -72,7 +76,7 @@ namespace StdInvoke {
         // => 15
 
         // lambda expression:
-        auto a = std::invoke([](auto a, auto b) {return a + b; }, 11, 12);
+        auto a = std::invoke( [](auto a, auto b) {return a + b; } , 11, 12);
         std::cout << "a: " << a << std::endl;
         // => 23
     }

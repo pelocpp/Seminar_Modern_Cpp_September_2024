@@ -6,6 +6,15 @@ Guten Morgen
 
 ========================
 
+peter.loos@gmx.de
+
+https://github.com/pelocpp
+
+https://peterloos.de/
+
+
+========================
+
 a) Visual Studio / Eclipse
 
 b) Übungen
@@ -69,6 +78,8 @@ noexcept: Wozu
 Geschachtelte Struktur: Initialisierung
 
 Modul-Technik
+
+explicit
 
 ===============================================
 
@@ -499,6 +510,180 @@ Womit hat ein Tuple Ähnlichkeit?
 Mit einem struct !!!
 
 Ein Tuple ist ein struct für Schreibfaule :)
+
+==========================================================
+
+Variadische Templates: C++ 11
+
+Tool: Cpp Insights
+
+Why ?????????????????????????????????????????????
+
+a) makeXXX - Funktionen
+
+b) emplace
+
+==========================================================
+
+Go - for - Emplace  :  pushback ==> emplace
+
+C++ 11:  Parameter Pack:
+
+... args   ==> mehrere Parameter können an einen Namen gebunden werden.
+
+args ...   ==> aus mehreren Parametern wird eine komma-getrennte Liste generiert
+
+
+Idee:  Trick: 
+
+==========================================================
+
+Templates und Parameter:
+
+Wir haben ein Problem bei Call-by-Reference und 
+temp. Objekten
+
+Lösung:  "Perfektes Forwarding"
+
+==========================================================
+
+Klasse std::string        ===> new           (kleine Ausnahmen ....)
+
+
+
+Konstante Zeichenketten:  "Window"  als Menüüberschrift
+
+std::string s { "Window" };   ===> new  // Heap
+
+const char* s = "Window";  
+
+C:   char* s = "Window";  
+C++: const char* s = "Window";  
+
+NICHT: STACK, HEAP
+
+WO DANN:  Data Segment // Code Segment 
+
+
+std::string_view
+
+#define   WINDOW    "Another Window"
+
+constexpr const char* wp = "Another Window";
+
+==> #define  : Preprozessor
+
+
+void foo ()
+{
+   char* cp = WINDOW;
+}
+
+
+
+std::span:
+
+// Anfangsadresse von Array oder Vektor
+// Länge
+
+std::string_view  // Anfangsadresse + Länge
+
+VERSUS
+
+const char* cp;   // Anfangsadresse 
+
+==> Non - Owning Object: gilt auch für std::string_view 
+
+==================================================
+
+Performanz
+
+std::string
+
+new / Heap .... Hmmm, können wir das vermeiden 
+
+a) std::string_view
+
+b) Optimierung:  Kleine / kurze Zeichenketten legen
+      wir DIREKT in einem std::string-Objekt ab: STACK
+
+============================================================
+
+Folding
+
+int result = 1 + 2 + 3 + 4 + 5;
+
+Wiederholte Ausführung desselben Operators:  +, -, << 
+
+for: 
+
+ABER: Folding  ===> Performanz
+
+Viele Werte / Argumente: Folding Ausdruck  ===> Parameter Pack
+
+Wiederholte Ausführung desselben Operators:  Komma-Operator
+
+============================================================
+
+Statischer versus dynamischer Polymorphismus
+
+std::vector<int>
+
+Homogener Container    ==> Alle Elemente im Container sind vom selben Typ
+
+Heterogener Container  ==> Die Elemente im Container können unterschiedlichen
+                           Typs sein.
+
+Java: ArrayList : Typ Object
+
+C#:   ArrayList : Typ Object
+
+// =========================================================
+
+Concepts and Requirements
+-------------------------
+
+int add(int a, int b)
+{
+    return a + b;
+}
+
+long add(long a, long b)
+{
+    return a + b;
+}
+
+// ------------------------------
+
+template <typename T>
+T add(T a, T b)
+{
+    return a + b;
+}
+
+Was kann T sein: ALLES
+
+Hmm , wenn T nicht passt:  REAGIERENDES VERHALTEN.
+
+// ------------------------------
+
+template <typename T>
+   requires MyConstraint<T>
+T add(T a, T b)
+{
+    return a + b;
+}
+
+Was kann T sein: Nur das, was das MyConstraint erlaubt.
+
+PROAKTIVES VERHALTEN.
+
+=================================================
+
+discarding return value of function with [[nodiscard]] attribute
+
+
+
 
 
 

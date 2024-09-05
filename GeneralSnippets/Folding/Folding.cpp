@@ -4,6 +4,95 @@
 
 module modern_cpp:folding;
 
+
+template<typename ... TArgs>
+
+static void logInternal(std::ostream& os, TArgs&& ...args)
+{
+    std::stringstream ss;
+ //   ss << getPrefix();
+    ss << '\t';
+
+    // viele Male <<: Feht, weil ss liegt am Stack
+    (ss << ... << std::forward<TArgs>(args)) << std::endl;
+
+    os << ss.str();   // einmal << ist thread-safe
+}
+
+
+namespace Folding_Seminar {
+
+    void test()
+    {
+        logInternal(std::cout, "Der Wert ist:" , 123, ".");
+    }
+
+    template <typename ... TArgs>
+    auto addierer(TArgs ... args) {
+
+        auto tmp = (... + args) ;   // 3 Beteiligte: +   args ...
+        return tmp;
+    }
+
+    template <typename ... TArgs>
+    auto subtrahierer(TArgs ... args) {
+
+        // auto tmp = (... - args); 
+        auto tmp = (args - ...);
+        return tmp;
+    }
+
+    template <typename ... TArgs>
+    void printer (TArgs ... args) {
+
+        // (((std::cout << pack1) << pack2) << ...) << packN
+
+        (std::cout << ... << args);
+    }
+
+    template <typename TFirst, typename ... TArgs>
+    void printerEx(TFirst first, TArgs ... args) {
+
+        // (((std::cout << pack1) << pack2) << ...) << packN
+
+        // Filding über einem Komma: Sequenz
+
+        std::cout << first;
+
+        ( ... , (  std::cout << " - " << args ) );
+    }
+
+
+
+    void testFolding() {
+
+        //int a;
+        //int b;
+        //int c;
+
+        //a = 10; b = 20;
+
+        //if (  c = (a = 10, b = 20) ) {
+
+        //}
+
+        auto result = addierer(1, 2, 3, 4, 5);
+
+        printerEx(1, 123.456, "ABC", '?', false);
+
+        std::cout << std::endl;
+    }
+
+}
+
+
+
+
+
+
+
+
+
 namespace Folding {
 
     /* folding examples: introduction
@@ -128,8 +217,13 @@ namespace Folding {
     }
 }
 
+
 void main_folding()
 {
+    using namespace Folding_Seminar;
+    testFolding();
+    return;
+
     using namespace Folding;
     test_01();
     test_02();

@@ -9,7 +9,7 @@ module;
 module modern_cpp:type_erasure;
 
 namespace {
-    size_t MaxIterations = 1000000;
+    size_t MaxIterations = 10'000'000;
 }
 
 // =====================================================================================
@@ -234,6 +234,8 @@ namespace BookStoreUsingDynamicPolymorphism {
         virtual size_t getCount() const = 0;
     };
 
+
+
     class Book : public IMedia
     {
     private:
@@ -250,8 +252,9 @@ namespace BookStoreUsingDynamicPolymorphism {
         // getter / setter
         std::string getAuthor() const { return m_author; }
         std::string getTitle() const { return m_title; }
-        double getPrice() const { return m_price; }
-        size_t getCount() const { return m_count; }
+
+        double getPrice() const override { return m_price; }
+        size_t getCount() const override { return m_count; }
     };
 
     class Movie : public IMedia
@@ -270,15 +273,17 @@ namespace BookStoreUsingDynamicPolymorphism {
         // getter / setter
         std::string getTitle() const { return m_title; }
         std::string getDirector() const { return m_director; }
-        double getPrice() const { return m_price; }
-        size_t getCount() const { return m_count; }
+
+        double getPrice() const override { return m_price; }
+        size_t getCount() const override { return m_count; }
     };
 
     class Bookstore
     {
     private:
         using Stock = std::vector<std::shared_ptr<IMedia>>;
-        using StockList = std::initializer_list<std::shared_ptr<IMedia>>;
+
+        using StockList = std::initializer_list<std::shared_ptr<IMedia>>;  // Stack
 
     public:
         explicit Bookstore(StockList stock) : m_stock{ stock } {}
@@ -292,6 +297,8 @@ namespace BookStoreUsingDynamicPolymorphism {
             double total{};
 
             for (const auto& media : m_stock) {
+
+                // ACHTUNG: -> INDIREKTER METHODENAUFRUF !!! Performanz
                 total += media->getPrice() * media->getCount();
             }
 
@@ -401,14 +408,20 @@ namespace BookStoreUsingDynamicPolymorphism {
 }
 
 // =====================================================================================
+// =====================================================================================
+// =====================================================================================
+// =====================================================================================
+// =====================================================================================
+
 
 namespace BookStoreUsingTypeErasure {
 
-    class Book
+    class Book // : public IMedia
     {
     private:
         std::string m_author;
         std::string m_title;
+
         double m_price;
         size_t m_count;
 
@@ -420,11 +433,12 @@ namespace BookStoreUsingTypeErasure {
         // getter / setter
         std::string getAuthor() const { return m_author; }
         std::string getTitle() const { return m_title; }
-        double getPrice() const { return m_price; }
+
+        double getPrice() const { return m_price; }   // <= Kann man das festschreiben ??
         size_t getCount() const { return m_count; }
     };
 
-    class Movie
+    class Movie // : public IMedia
     {
     private:
         std::string m_title;
@@ -440,9 +454,12 @@ namespace BookStoreUsingTypeErasure {
         // getter / setter
         std::string getTitle() const { return m_title; }
         std::string getDirector() const { return m_director; }
+
         double getPrice() const { return m_price; }
         size_t getCount() const { return m_count; }
     };
+
+    // Modernes 'interface' der generischen Programmierung
 
     template<typename T>
     concept MediaConcept = requires (const T & m)
@@ -451,13 +468,18 @@ namespace BookStoreUsingTypeErasure {
         { m.getCount() } -> std::same_as<size_t>;
     };
 
+
     template <typename ... TMedia>
+    
         requires (MediaConcept<TMedia> && ...)
+    
     class Bookstore
     {
     private:
-        using StockType = std::variant<TMedia ...>;
-        using Stock = std::vector<StockType>;
+        using StockType = std::variant<TMedia ...>; //  std::variant<Book, Movie>
+
+        using Stock = std::vector<std::variant<TMedia ...>>;
+
         using StockList = std::initializer_list<StockType>;
 
     public:
@@ -466,7 +488,9 @@ namespace BookStoreUsingTypeErasure {
         // template member method
         template <typename T>
         void addMedia(const T& media) {
-            // m_stock.push_back(StockType{ media });  // ausführliche Schreibweise
+            
+       //     m_stock.push_back(std::variant<TMedia ...>{ media });  // ausführliche Schreibweise
+            
             m_stock.push_back(media);
         }
 
@@ -530,8 +554,10 @@ namespace BookStoreUsingTypeErasure {
 
                 total += std::visit(
                     [](const auto& element) {
+
                         double price = element.getPrice();
                         size_t count = element.getCount();
+
                         return price * count;
                     },
                     media
@@ -579,6 +605,7 @@ namespace BookStoreUsingTypeErasure {
         };
 
         double balance{ bookstore.totalBalance() };
+
         std::cout << "Total value of Bookstore: " << balance << std::endl;
         size_t count{ bookstore.count() };
         std::cout << "Count of elements in Bookstore: " << count << std::endl;
@@ -592,6 +619,9 @@ namespace BookStoreUsingTypeErasure {
         using MyBookstore = Bookstore<Book, Movie>;
 
         MyBookstore bookstore{ cBook, movieBond };
+
+        //std::string s{ "Zeitung" };
+        //bookstore.addMedia(s);
 
         Book csharpBook{ "C#", "Anders Hejlsberg", 21.99, 8 };
         bookstore.addMedia(csharpBook);
@@ -679,18 +709,18 @@ void main_type_erasure()
     using namespace BookStoreUsingDynamicPolymorphism;
     using namespace BookStoreUsingTypeErasure;
 
-    TypeErasureUsingDynamicPolymorphism::test_type_erasure_using_dynamic_polymorphism();
-    TypeErasureUsingTemplateTechniques::test_type_erasure_using_template_techniques();
-    TypeErasureUsingTemplateTechniquesAndConcepts::test_type_erasure_using_template_techniques();
+    //TypeErasureUsingDynamicPolymorphism::test_type_erasure_using_dynamic_polymorphism();
+    //TypeErasureUsingTemplateTechniques::test_type_erasure_using_template_techniques();
+    //TypeErasureUsingTemplateTechniquesAndConcepts::test_type_erasure_using_template_techniques();
 
-    BookStoreUsingDynamicPolymorphism::test_bookstore_polymorphic_01();
-    BookStoreUsingDynamicPolymorphism::test_bookstore_polymorphic_02();
-    BookStoreUsingDynamicPolymorphism::test_bookstore_polymorphic_03();
+    //BookStoreUsingDynamicPolymorphism::test_bookstore_polymorphic_01();
+    //BookStoreUsingDynamicPolymorphism::test_bookstore_polymorphic_02();
+    //BookStoreUsingDynamicPolymorphism::test_bookstore_polymorphic_03();
     BookStoreUsingDynamicPolymorphism::test_bookstore_polymorphic_04();
 
-    BookStoreUsingTypeErasure::test_bookstore_type_erasure_01();
-    BookStoreUsingTypeErasure::test_bookstore_type_erasure_02();
-    BookStoreUsingTypeErasure::test_bookstore_type_erasure_03();
+    //BookStoreUsingTypeErasure::test_bookstore_type_erasure_01();
+    //BookStoreUsingTypeErasure::test_bookstore_type_erasure_02();
+    //BookStoreUsingTypeErasure::test_bookstore_type_erasure_03();
     BookStoreUsingTypeErasure::test_bookstore_type_erasure_04();
 }
 
