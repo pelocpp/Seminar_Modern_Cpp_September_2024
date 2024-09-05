@@ -6,7 +6,8 @@ module modern_cpp:explicit_keyword;
 
 namespace KeywordExplicit {
 
-    class Complex {
+    class Complex
+    {
     private:
         double m_real;
         double m_imag;
@@ -15,7 +16,7 @@ namespace KeywordExplicit {
         // c'tors
         Complex() : Complex {0.0, 0.0}{}
 
-        /* explicit */ Complex(double real) :   // remove or add keyword 'explicit'
+        explicit Complex(double real) :   // remove or add keyword 'explicit'
             m_real{ real }, m_imag{} {}
 
         explicit Complex(double real, double imag) :
@@ -36,7 +37,7 @@ void main_explicit_keyword()
     // a Complex object
     Complex c{ 3.0, 0.0 };
     
-    if (c == 3.0)  // remove or add cast '(Complex)'
+    if (c == Complex(3.0, 0.0))  // remove or add cast '(Complex)'
     {
         std::cout << "Same objects" << std::endl;
     }

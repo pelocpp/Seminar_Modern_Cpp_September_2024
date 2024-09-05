@@ -70,7 +70,7 @@ namespace BraceInitialization {
 
     static void test_03()
     {
-        struct Struct obj0;                           // uninitialized !!!
+        [[ maybe_unused  ]]struct Struct obj0;                           // uninitialized !!!
         struct Struct obj1 {};                        // obj1.m_i => 0, obj1.m_j => 0
         struct Struct obj2 { 1, 2 };                  // obj2.m_i => 1, obj2.m_j => 2
         struct Struct obj3 { 3 };                     // obj3.m_i => 3, obj3.m_j => 0
@@ -261,7 +261,9 @@ namespace BraceInitialization {
         std::cout << "a: " << s.m_a << ", b: " << s.m_b << std::endl;
 
         // or - using C++ designated initializers:
-        MyDataStruct s2{ .m_a = 43, .m_b = 1.3 };
+
+        MyDataStruct s2{ .m_b = 1.3 };
+
         std::cout << "a: " << s2.m_a << ", b: " << s2.m_b << std::endl;
 
         // initialization of public attributes of an arbitrary object
@@ -380,9 +382,95 @@ namespace BraceInitialization {
     }
 }
 
+namespace NestedStructs
+{
+    // POD - C-kompatibel
+    struct Point
+    {
+        int x;
+        int y;
+    };
+
+    // POD // C-kompatibel
+    struct Rectangle
+    {
+        struct Point leftUpper;
+        struct Point rightLower;
+    };
+
+    void test()
+    {
+        Rectangle r1{ {1, 2}, {3, 4} };
+        Rectangle r2{ {}, {} };
+        Rectangle r3{ };
+        Rectangle r4{ 1, 2, 3, 4 };
+        Rectangle r5{ 1, 2 };
+
+        int zahlen1[100];
+        int zahlen2[100] = { 1, 2, 3 };
+        int zahlen3[100] = { 1 };
+
+        // Go - for, wenn 0
+        int zahlen4[100] = { 0 };
+
+        // No go
+        for (int i = 0; i < 100; ++i) {
+            zahlen4[i] = 0;
+        }
+
+        // Go - for, wenn ungleich 0
+        std::fill(
+            std::begin(zahlen4),
+            std::end(zahlen4),
+            100
+        );
+
+        // VORSICHT: Füllt byte weise !!!!!!!!!!
+        std::memset(zahlen4, 10, 100 * sizeof (int));
+
+        // int* ptr = new int[100];
+
+        // 1, 2, 3, 4, 5, 6
+        for (int i = 0; i < 100; ++i) {
+            zahlen4[i] = i+1;
+        }
+
+        // std::for_each
+        int zahlen5[100];
+        // std::array<int, 100> xxx;
+
+        std::for_each(
+            std::begin(zahlen5),
+            std::end(zahlen5),
+            [start = 10] (int& n) mutable {
+
+                n = start + 1;
+                start++;
+            }
+        );
+
+        // std::generate
+        int zahlen6[100];
+
+        std::generate(
+            std::begin(zahlen6),
+            std::end(zahlen6),
+            [start = 10] () mutable {
+
+                int value = start + 1;
+                start++;
+                return value;
+            }
+        );
+
+    }
+}
+
 void main_brace_initialization()
 {
     using namespace BraceInitialization;
+
+    NestedStructs::test();
 
     test_00();
     test_01(); 

@@ -684,7 +684,53 @@ discarding return value of function with [[nodiscard]] attribute
 
 
 
+===================================================
+
+explicit
+
+===================================================
+
+Referenz Wrapper
+
+===================================================
 
 
+std::for_each 
+versus
+std::generate 
+
+Unterschied:
+
+
+
+std::generate(
+    std::begin(zahlen6),
+    std::end(zahlen6),
+    [start = 10] () mutable {
+
+        int value = start + 1;
+        start++;
+        return value;
+    }
+);
+
+Gibt es hier eine Art "Vorgehensweise" / "Philosophie" in der STL  ????
+
+Ja:
+
+"Building Blocks"
+
+"Baustein"
+
+===================================================
+
+Modul-Technik
+
+C++ 20 // Hängt auch vom Compiler ab ....
+
+===================================================
+
+Multi-Threading:
+----------------
 
 

@@ -22,15 +22,30 @@ namespace AlgorithmTransform {
             std::cout << name << ": " << number << std::endl;
         }
 
-        std::vector<std::string> names(phonebook.size());  // set size of vector (!)
+    //    std::vector<std::string> names(phonebook.size());  // set size of vector (!)
+
+        std::vector<std::string> names;  
 
         // std::transform on a single range - retrieve names from phonebook
+
+        //names.push_back();
+        //names[i] = "";
+
         std::transform(
             phonebook.begin(),
             phonebook.end(),
-            names.begin(),      // beginning of the destination range
-            [](const std::pair<std::string, size_t>& entry) {
-                return std::get<0>(entry);
+
+            // names.begin(),      // beginning of the destination range
+
+            // Iteratoren Adapter:  std::back_inserter  ==> push_back
+            std::back_inserter(names),
+
+            [] (const std::pair<std::string, size_t>& entry) {
+
+                const auto& [name, nummer] = entry;
+                return name;
+
+                // return std::get<0>(entry);
             }
         );
 
@@ -109,8 +124,8 @@ void main_transform()
 {
     using namespace AlgorithmTransform;
     test_01();
-    test_02();
-    test_03();
+    //test_02();
+    //test_03();
 }
 
 // =====================================================================================
